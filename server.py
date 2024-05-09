@@ -1,5 +1,6 @@
 import socket
 import threading
+import ssl
 
 HEADER = 64
 PORT = 5050
@@ -7,9 +8,9 @@ SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDR)
+SSL_AUTHENTICATION = False
+context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+context.load_cert_chain('ssl.pem', 'private.key')
 
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
@@ -31,13 +32,29 @@ def handle_client(conn, addr):
 
 
 def start():
-    server.listen()
-    print(f"[LISTENING] Server is listening on {SERVER}")
-    while True:
-        conn, addr = server.accept()
-        thread = threading.Thread(target=handle_client, args=(conn, addr))
-        thread.start()
-        print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
+    
+    
+    if SSL_AUTHENTICATION:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0) as server:
+            server.bind(ADDR)
+            server.listen()
+            print(f"[LISTENING] Server is listening on {SERVER}")
+            with context.wrap_socket(server, server_side=True) as ssock:
+                while True:
+                    conn, addr = ssock.accept()
+                    thread = threading.Thread(target=handle_client, args=(conn, addr))
+                    thread.start()
+                    print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
+    else:
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.bind(ADDR)
+        server.listen()
+        print(f"[LISTENING] Server is listening on {SERVER}")
+        while True:
+            conn, addr = server.accept()
+            thread = threading.Thread(target=handle_client, args=(conn, addr))
+            thread.start()
+            print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
 
 print("[STARTING] server is starting...")
 start()
