@@ -12,6 +12,7 @@ SSL_AUTHENTICATION = False
 context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 context.load_cert_chain('ssl.pem', 'private.key')
 
+
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
