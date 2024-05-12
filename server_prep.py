@@ -26,7 +26,7 @@ if SSL_ENABLED:
 def handle_client(client_socket) -> None:
     try:
         """Receive data from client in the required format and size in bytes"""
-        data = client_socket.recv(1024).decode().rstrip('\x00')
+        data: str = client_socket.recv(1024).decode().rstrip('\x00')
 
         """Search for string in file"""
         with open(FILE_PATH, 'r') as file:
@@ -52,9 +52,9 @@ def handle_client(client_socket) -> None:
         client_socket.close()
 
 """Main server loop"""
-def main():
+def main()-> None:
     """Set up server socket"""
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((LISTEN_IP, PORT))
     server_socket.listen(5)
 
@@ -66,9 +66,9 @@ def main():
         print(f'Connection from {addr[0]}:{addr[1]}')
 
         if SSL_ENABLED:
-            client_socket = context.wrap_socket(client_socket, server_side=True)
+            client_socket: socket = context.wrap_socket(client_socket, server_side=True)
 
-        client_thread = threading.Thread(target=handle_client, args=(client_socket,))
+        client_thread: threading = threading.Thread(target=handle_client, args=(client_socket,))
         client_thread.start()
 
 if __name__ == '__main__':
