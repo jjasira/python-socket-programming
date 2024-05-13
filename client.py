@@ -1,36 +1,46 @@
-import socket
 import ssl
+import socket
+import sys
 
-HEADER = 64
-PORT = 5050
-FORMAT = 'utf-8'
-DISCONNECT_MESSAGE = "!DISCONNECT"
-SSL_AUTHENTICATION = False
-SERVER = socket.gethostbyname(socket.gethostname())
+SERVER_IP = socket.gethostbyname(socket.gethostname())  # Replace with your server's IP
+SERVER_PORT = 5050  # Replace with your server's port
+HEADER = 1024
+DISCONNECT_MESSAGE: str = "!DISCONNECT"
+SSL_ENABLED: bool = False
+ADDR: tuple = (SERVER_IP, SERVER_PORT)
+FORMAT = "utf-8"
 
-ADDR = (SERVER, PORT)
+if SSL_ENABLED:
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    context.load_verify_locations('ssl.pem')
 
-context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-context.load_verify_locations('ssl.pem')
+"""Create a socket object"""
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-"""We are connecting to our server"""
-if SSL_AUTHENTICATION:
-    client_soc = context.wrap_socket(client, server_hostname=SERVER)
-    client_soc.connect(ADDR)
+"""Connect to the server"""
+if SSL_ENABLED:
+    client_socket = context.wrap_socket(client_socket, server_hostname=SERVER_IP)
+    client_socket.connect(ADDR)
 else:
-    client.connect(ADDR)    
+    client_socket.connect((SERVER_IP, SERVER_PORT))
 
-
-def send(msg):
+def send_data(msg):
     message = msg.encode(FORMAT)
     msg_length = len(message)
     send_length = str(msg_length).encode(FORMAT)
+    """Ensure that the message sent is the required size by padding or removing extra characters
+        this will also prevent BUFFER OVERFLOW
+    """
     send_length += b' ' * (HEADER - len(send_length))
-    client.send(send_length)
-    client.send(message)
-    print(client.recv(2048).decode(FORMAT))
+    client_socket.send(send_length)
+    client_socket.send(message)
+    """Receive response from the server"""
 
-send("Baby")
-# send(DISCONNECT_MESSAGE)
+"""Send the message to the server"""
+data = sys.argv[1]
+send_data(data)
 
+response = client_socket.recv(1024)
+print("Server response:", response.decode(FORMAT))
+"""Close the socket"""
+client_socket.close()
