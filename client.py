@@ -31,12 +31,6 @@ def send(msg):
     client.send(message)
     print(client.recv(2048).decode(FORMAT))
 
-send("Hello world")
-input()
-send("Hello everyone")
-input()
-send("Hello James")
-
-
-send(DISCONNECT_MESSAGE)
+send("Baby")
+# send(DISCONNECT_MESSAGE)
 

@@ -1,0 +1,68 @@
+Setup and Configuration:
+
+Create a Python project directory.
+Create a config.ini file for configuration settings like linuxpath, REREAD_ON_QUERY, and SSL_ENABLED.
+Use Python's configparser module to parse the configuration file.
+SSL Configuration:
+
+Implement SSL/TLS using Python's ssl module.
+Generate a self-signed certificate or use pre-shared keys (PSK) based on the configuration.
+Handle SSL configuration in the server script.
+Server Script:
+
+Create a Python script for the server (server.py).
+Use multithreading for handling concurrent connections.
+Implement a TCP server using Python's socket module.
+Accept connections and receive data from clients.
+File Search Algorithm:
+
+Implement file search logic based on the String received from clients.
+Depending on REREAD_ON_QUERY, either read the file on every query or load it once.
+Response Handling:
+
+Send appropriate responses (STRING EXISTS or STRING NOT FOUND) back to clients.
+Include debug logs with search query, IP address, execution time, timestamps, etc.
+Security Measures:
+
+Implement buffer overflow protection.
+Handle other potential security issues.
+Ensure robust exception handling with clear error messages.
+Unit Tests:
+
+Write unit tests using pytest to cover different execution scenarios:
+Varying file sizes (from 10,000 to 1,000,000 rows).
+Varying numbers of queries per second.
+Edge cases and exceptions.
+Client Script:
+
+Create a Python client script (client.py) for testing purposes.
+Use Python's socket module to connect to the server.
+Send test queries and receive responses.
+Speed Testing and Report:
+
+Benchmark different file search algorithms and options:
+Linear search
+Binary search (if applicable)
+Hash-based search (e.g., using dictionaries)
+Regular expression search
+Custom optimized search (bonus point)
+Measure performance based on file sizes and number of queries per second.
+Generate a speed testing report with a table and chart comparing the algorithms' performances.
+Documentation and Packaging:
+
+Ensure PEP8 and PEP20 compliance.
+Add type hints and docstrings for clarity.
+Document the code professionally.
+Package the code neatly with a requirements.txt file.
+Create a README.md explaining how to install and run the server as a Linux daemon or service.
+Submission:
+
+Organize the project structure.
+Include all necessary files in a zip file for submission:
+Code files (server.py, client.py, etc.)
+Configuration file (config.ini)
+Test data (if applicable)
+Speed testing report (PDF format)
+README.md with installation instructions
+requirements.txt
+This outline should give you a comprehensive guide to developing the server script and meeting all the specified requirements. Be sure to thoroughly test the code and handle all edge cases and exceptions.
