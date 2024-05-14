@@ -20,7 +20,7 @@ PORT = 5050
 SSL_ENABLED= False
 # CERTIFICATE_PATH: str = config.get('server', 'certificate_path')
 # REREAD_ON_QUERY: bool = config.getboolean('server', 'reread_on_query')
-REREAD_ON_QUERY = True
+REREAD_ON_QUERY = False
 # FILE_PATH: str = config.get('server', 'linuxpath')
 FILE_PATH = "200k.txt"
 HEADER: int = 1024
@@ -57,9 +57,10 @@ def search_string(msg: str, file_path) -> bool:
     start = time.perf_counter()
     print(f'search query: {msg}')
     if REREAD_ON_QUERY  == False:
+        Found = re.search(rf'^{msg}$', Initial_file_content, re.MULTILINE) is not None
         finish = time.perf_counter()
         print(f'finished in {round(finish-start, 2)} second(s)')
-        return re.search(rf'^{msg}$', Initial_file_content, re.MULTILINE) is not None
+        return Found
                     
                 
     else:
