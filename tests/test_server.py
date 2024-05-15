@@ -5,7 +5,7 @@ import pytest
 """we will import the clone of our original server that will be used for testing purposes
    we will also import the required contants that will be used to format our messages
 """
-from server_clone import main as server_main, DISCONNECT_MESSAGE, HEADER, FORMAT
+from server_clone import main as server_main, DISCONNECT_MESSAGE, HEADER, FORMAT, LISTEN_IP, PORT
 
 @pytest.fixture(scope='module')
 def server():
@@ -16,7 +16,7 @@ def server():
     yield
     """Server will be stopped when tests are done due to daemon=True"""
 
-def send_message(sock, message):
+def send_message(sock: socket, message: str) -> None:
     message = message.encode(FORMAT)
     message_length = len(message)
     send_length = str(message_length).encode(FORMAT)
@@ -29,10 +29,11 @@ def send_message(sock, message):
     ("NonExistentString", b'STRING NOT FOUND\n'),  # Does not exist in file
     ("String", b'STRING NOT FOUND\n'), # The server should not return true for a word that is a substring
     ("tESTsTRING", b'STRING NOT FOUND\n'), # The query should be case sensitive
+    ("Brother", b'STRING NOT FOUND\n'),
 ])
-def test_server_responses(server, input_string, expected_response):
-    host = '127.0.0.1'
-    port = 5050
+def test_server_responses(server, input_string: str, expected_response: str):
+    host = LISTEN_IP
+    port = PORT
 
     with socket.create_connection((host, port)) as sock:
         send_message(sock, input_string)
@@ -40,8 +41,8 @@ def test_server_responses(server, input_string, expected_response):
         assert response == expected_response
 
 def test_disconnect_message(server):
-    host = '127.0.0.1'
-    port = 5050
+    host = LISTEN_IP
+    port = PORT
 
     with socket.create_connection((host, port)) as sock:
         send_message(sock, DISCONNECT_MESSAGE)
