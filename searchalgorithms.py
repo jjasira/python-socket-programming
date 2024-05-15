@@ -2,6 +2,7 @@
 import random
 import string
 import time
+from tabulate import tabulate
 
 """External imports."""
 import matplotlib.pyplot as plt
@@ -235,6 +236,24 @@ if __name__ == '__main__':
         times_boyer_moore.append(measure_time(boyer_moore_search, text, pattern))
         times_rabin_karp.append(measure_time(rabin_karp_search, text, pattern))
         times_aho_corasick.append(measure_time(ac.search, text))
+
+    # Prepare data for table
+    table_data = [
+        ["File Size (characters)", "Naive Search", "KMP Search", "Boyer-Moore Search", "Rabin-Karp Search", "Aho-Corasick Search"]
+    ]
+
+    for i in range(len(file_sizes)):
+        table_data.append([
+            file_sizes[i],
+            times_naive[i],
+            times_kmp[i],
+            times_boyer_moore[i],
+            times_rabin_karp[i],
+            times_aho_corasick[i]
+        ])
+
+    # Print table
+    print(tabulate(table_data, headers="firstrow", tablefmt="grid"))
 
     # Plotting the results
     plt.figure(figsize=(12, 6))
