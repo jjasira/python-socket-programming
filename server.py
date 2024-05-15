@@ -1,3 +1,4 @@
+"""Standard Library imports"""
 import configparser
 import logging
 import re
@@ -5,6 +6,10 @@ import socket
 import ssl
 import threading
 import time
+
+"""module imports"""
+"""These are the different file search algorithms that we can implement in our search function."""
+from searchalgorithms import boyer_moore_search, kmp_search, naive_search, AhoCorasick, rabin_karp_search
 
 """Load configuration."""
 config = configparser.ConfigParser()
@@ -62,6 +67,15 @@ def search_string(msg: str, file_path: str) -> bool:
     print(f'search query: {msg}')
     if REREAD_ON_QUERY  == False:
         """We will use the file as read when the server was started."""
+        """We can implement any of our imported search methods, I have gone with the default
+           python file search algorithm because it's the fastest.
+        """
+        """
+            if kmp_search(Initial_file_content, msg) == -1:
+                Found = False
+            else:
+                Found = True
+        """
         Found: bool = re.search(rf'^{msg}$', Initial_file_content, re.MULTILINE) is not None
         finish: float = time.perf_counter() # Log when the function was finished
         print(f'finished in {round(finish-start, 2)} second(s)') # Get the total time spent on the search
@@ -71,7 +85,7 @@ def search_string(msg: str, file_path: str) -> bool:
         if file_content is None:
             logging.error('File content not loaded!')
             return False
-        Found: bool = re.search(rf'^{msg}$', Initial_file_content, re.MULTILINE) is not None
+        Found: bool = re.search(rf'^{msg}$', file_content, re.MULTILINE) is not None
         finish: float = time.perf_counter()
         print(f'finished in {round(finish-start, 2)} second(s)')
         return Found
