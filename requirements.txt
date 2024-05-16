@@ -1,0 +1,10 @@
+matplotlib==3.8.4
+pytest==8.2.0
+tabulate==0.9.0
+
+These three modules are not in the standard library and should therefore be installed for the project to work properly.
+During the making of the project, the versions indicated were the latest versions. Keep that in mind in case of deprecation
+of certain functions.
+
+python==3.11.5
+This is the python version used in the making of the project.

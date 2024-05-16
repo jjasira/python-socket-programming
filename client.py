@@ -1,7 +1,16 @@
-import ssl
+import configparser
 import socket
+import ssl
 import sys
 
+"""Load configuration."""
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+# LISTEN_IP: str = config.get('server', 'listen_ip')
+# PORT: int = int(config.get('server', 'port'))
+# SSL_ENABLED: bool = config.getboolean('server', 'ssl_enabled')
+# PEM_FILE_LOCATION: str = config.get('server', 'certificate_pem')
 SERVER_IP = socket.gethostbyname(socket.gethostname())  # Replace with your server's IP
 SERVER_PORT = 5050  # Replace with your server's port
 HEADER = 1024
