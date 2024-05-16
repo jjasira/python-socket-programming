@@ -100,9 +100,9 @@ def handle_client(client_socket: socket) -> None:
         """Receive data from client in the required format and size in bytes"""
         connected: bool= True
         while connected:
-            msg_length = client_socket.recv(HEADER).decode(FORMAT).rstrip('\x00')
+            msg_length: int = client_socket.recv(HEADER).decode(FORMAT).rstrip('\x00')
             if msg_length:
-                msg_length: int = int(msg_length)
+                msg_length = int(msg_length)
                 data: str = client_socket.recv(msg_length).decode(FORMAT).rstrip('\x00')
                 if data == DISCONNECT_MESSAGE:
                     connected = False
@@ -132,7 +132,7 @@ def main()-> None:
         """The wrap_socket wrapper encrypts and decrypts the data going over
            the soxket with SSL.
         """
-        server_socket: socket = context.wrap_socket(client_socket, server_side=True)
+        server_socket = context.wrap_socket(client_socket, server_side=True)
 
     print(f'Server listening on {LISTEN_IP}:{PORT}')
 

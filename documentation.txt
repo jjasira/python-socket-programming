@@ -1,0 +1,47 @@
+SERVER.PY 
+
+Uses of the various imports:
+    1. Configparser- enables reading the configuration file to get the specifications such as the port number
+    2. Logging - assists in debugging and creating logs
+    3. Re - Reading the text and searching for the queried pattern from the user
+    4. Socket - creating a web-socket object
+    5. ssl - for implementing SSL security by wrapping the seb-socket
+    6. Threading - creating a threads for each client to enable concurrent processing of requests
+    7. time - timing execution times for functions
+    8. Searchalgorithms - import the search algorithms from the searchalgorithms.py file and implement them in the search string function
+
+CONSTANTS WILL BE PARSED FROM THE CONFIG.INI FILE
+LISTEN_IP - the ip address that will be bound to the server socket
+PORT - the port address that will be bound to the server socket
+SSL_ENABLED - a boolean value indicating whether ssl is enabled
+CERTIFICATE_PATH - a path to the SSL self signed certificate
+PRIVATE_KEY - a path to the private key for the ssl certificate
+CERT_PEM - a path to the pem file for the ssl certificate
+REREAD_ON_QUERY - a boolean value indicating whether rereading on query is enabled
+FILE_PATH - the linuxpath to the file to be read from.
+
+PREDETERMINED CONSTANTS
+HEADER - contains the size in bytes of the messages that will be sent between the server and client 
+FORMAT - contains the encoding and decoding format
+DISCONNECT_MESSAGE - contains the message that enables disconnection of the client.
+
+
+FUNCTIONS 
+1. read_file function - this function takes the path where the file is located as an argument
+   - it then opens the file with reading previledges, reads the file and stores the content in a string called 'file_content'.
+
+2. search_string function - this function takes the file path and message(pattern) being queried as arguments
+   - if the REREAD_ON_QUERY parameter is set to false, it will search for the message in the Initial_file_content and return true if the message is found otherwise false
+   - if the REREAD_ON_QUERY parameter is set to true, it will call the function read_file with the file_path as an argument and return the file_content then it will search for the message as above
+3. handle_client function - this function takes the client_socket as an argument
+   - checks if the client_socket is connected
+   - recieves the client message, decodes it and strips the '\x00' from the end
+   - if the message is equal to the DISCONNECT_MESSAGE, it disconnects the client
+   - Otherwise, it calls the search_string function with the client's message and the FILE_PATH
+   - if the message is found, it send 'STRING EXISTS' to the client, otherwise it sends 'STRING NOT FOUND'
+   - it finally disconnects the client
+4. main function - this contains the main event loop of the application
+   - creates the server socket, binds it to the IP address and a PORT, and listens to oncoming connections
+   - if ssl is enabled, it wraps the server socket with the ssl context
+   - it accepts connections from the client and stores the clients address
+   - it creates a client thread, calls the handle_client function with the client's socket as an argument and starts the thread

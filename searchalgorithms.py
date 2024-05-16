@@ -81,7 +81,7 @@ def boyer_moore_search(text: str, pattern: str) -> int:
         last_prefix: int = m
         for i in range(m - 1, -1, -1):
             if is_prefix(pattern, i + 1):
-                last_prefix: int = i + 1
+                last_prefix = i + 1
             good_suffix[m - 1 - i] = last_prefix - i + m - 1
         for i in range(m - 1):
             suffix_len: int = suffix_length(pattern, i)

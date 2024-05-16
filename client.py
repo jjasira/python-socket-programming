@@ -11,17 +11,17 @@ SERVER_IP: str = config.get('server', 'listen_ip')
 SERVER_PORT: int = int(config.get('server', 'port'))
 SSL_ENABLED: bool = config.getboolean('server', 'ssl_enabled')
 PEM_FILE_LOCATION: str = config.get('server', 'certificate_pem')
-HEADER = 1024
+HEADER: int = 1024
 DISCONNECT_MESSAGE: str = "!DISCONNECT"
 ADDR: tuple = (SERVER_IP, SERVER_PORT)
-FORMAT = "utf-8"
+FORMAT: str = "utf-8"
 
 if SSL_ENABLED:
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     context.load_verify_locations(PEM_FILE_LOCATION)
 
 """Create a socket object"""
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 """Connect to the server"""
 if SSL_ENABLED:
@@ -30,10 +30,10 @@ if SSL_ENABLED:
 else:
     client_socket.connect((SERVER_IP, SERVER_PORT))
 
-def send_data(msg):
-    message = msg.encode(FORMAT)
-    msg_length = len(message)
-    send_length = str(msg_length).encode(FORMAT)
+def send_data(msg: str) -> None:
+    message: bytes = msg.encode(FORMAT)
+    msg_length: int = len(message)
+    send_length: bytes = str(msg_length).encode(FORMAT)
     """Ensure that the message sent is the required size by padding or removing extra characters
         this will also prevent BUFFER OVERFLOW
     """
@@ -43,10 +43,10 @@ def send_data(msg):
     """Receive response from the server"""
 
 """Send the message to the server""" 
-data = sys.argv[1]
+data: str = sys.argv[1]
 send_data(data)
 
-response = client_socket.recv(1024)
+response: bytes = client_socket.recv(1024)
 print("Server response:", response.decode(FORMAT))
 """Close the socket"""
 client_socket.close()
