@@ -241,6 +241,10 @@ if __name__ == '__main__':
     table_data = [
         ["File Size (characters)", "Naive Search", "KMP Search", "Boyer-Moore Search", "Rabin-Karp Search", "Aho-Corasick Search"]
     ]
+    """The code above will populate the table headers as stipulated
+       the one below will populate the table body with the search times
+       for the search-algorithms against the file sizes.
+    """
 
     for i in range(len(file_sizes)):
         table_data.append([
@@ -253,6 +257,7 @@ if __name__ == '__main__':
         ])
 
     # Print table
+    """The table is printed using the tabulate module"""
     print(tabulate(table_data, headers="firstrow", tablefmt="grid"))
 
     # Plotting the results

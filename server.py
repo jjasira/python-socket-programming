@@ -23,6 +23,8 @@ PORT = 5050
 # SSL_ENABLED: bool = config.getboolean('server', 'ssl_enabled')
 SSL_ENABLED= False
 # CERTIFICATE_PATH: str = config.get('server', 'certificate_path')
+# PRIVATE_KEY: str = config.get('server', 'private_key')
+# CERT_PEM: str = config.get('server', 'certificate_pem')
 # REREAD_ON_QUERY: bool = config.getboolean('server', 'reread_on_query')
 REREAD_ON_QUERY = False
 # FILE_PATH: str = config.get('server', 'linuxpath')
@@ -39,7 +41,10 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 context = None
 if SSL_ENABLED:
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    context.load_cert_chain(CERTIFICATE_PATH)
+    """You can also use: 
+       context.load_cert_chain(CERTIFICATE_PATH)
+    """
+    context.load_cert_chain(CERT_PEM, PRIVATE_KEY)
 
 """This function will help us read the file and store the result in string
     It will come in handy when we want to reread the file content.
@@ -124,6 +129,11 @@ def main()-> None:
     server_socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((LISTEN_IP, PORT))
     server_socket.listen()
+    if SSL_ENABLED:
+        """The wrap_socket wrapper encrypts and decrypts the data going over
+           the soxket with SSL.
+        """
+        server_socket: socket = context.wrap_socket(client_socket, server_side=True)
 
     print(f'Server listening on {LISTEN_IP}:{PORT}')
 
@@ -132,8 +142,6 @@ def main()-> None:
         client_socket, addr = server_socket.accept()
         print('[DEBUG]')
         print(f'Connection from {addr[0]}:{addr[1]}')
-        if SSL_ENABLED:
-            client_socket: socket = context.wrap_socket(client_socket, server_side=True)
         client_thread: threading = threading.Thread(target=handle_client, args=(client_socket,))
         client_thread.start()
 

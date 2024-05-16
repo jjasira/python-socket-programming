@@ -99,6 +99,11 @@ def main() -> None:
     server_socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((LISTEN_IP, PORT))
     server_socket.listen(5)
+    if SSL_ENABLED:
+        """The wrap_socket wrapper encrypts and decrypts the data going over
+           the soxket with SSL.
+        """
+        server_socket: socket = context.wrap_socket(client_socket, server_side=True)
 
     print(f'Server listening on {LISTEN_IP}:{PORT}')
 
@@ -106,8 +111,6 @@ def main() -> None:
     while True:
         client_socket, addr = server_socket.accept()
         print(f'Connection from {addr[0]}:{addr[1]}')
-        if SSL_ENABLED:
-            client_socket: socket = context.wrap_socket(client_socket, server_side=True)
         client_thread: threading = threading.Thread(target=handle_client, args=(client_socket,))
         client_thread.start()
 

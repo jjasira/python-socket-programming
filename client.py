@@ -9,10 +9,11 @@ DISCONNECT_MESSAGE: str = "!DISCONNECT"
 SSL_ENABLED: bool = False
 ADDR: tuple = (SERVER_IP, SERVER_PORT)
 FORMAT = "utf-8"
+PEM_FILE_LOCATION: str = "ssl.pem"
 
 if SSL_ENABLED:
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-    context.load_verify_locations('ssl.pem')
+    context.load_verify_locations(PEM_FILE_LOCATION)
 
 """Create a socket object"""
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -36,7 +37,7 @@ def send_data(msg):
     client_socket.send(message)
     """Receive response from the server"""
 
-"""Send the message to the server"""
+"""Send the message to the server""" 
 data = sys.argv[1]
 send_data(data)
 
