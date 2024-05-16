@@ -32,6 +32,7 @@ def send_message(sock: socket, message: str) -> None:
     ("Father", b'STRING NOT FOUND\n'), # Has single quotes at the end
     ("Mother", b'STRING EXISTS\n'), # The string is at the end of the file
     ("Brother", b'STRING EXISTS\n'), # The string is in the middle of the file
+    ("TestStr", b'STRING NOT FOUND\n'),  # Should not accept partial matches
 ])
 def test_server_responses(server, input_string: str, expected_response: str):
     host = LISTEN_IP
