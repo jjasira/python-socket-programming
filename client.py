@@ -7,18 +7,14 @@ import sys
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-# LISTEN_IP: str = config.get('server', 'listen_ip')
-# PORT: int = int(config.get('server', 'port'))
-# SSL_ENABLED: bool = config.getboolean('server', 'ssl_enabled')
-# PEM_FILE_LOCATION: str = config.get('server', 'certificate_pem')
-SERVER_IP = socket.gethostbyname(socket.gethostname())  # Replace with your server's IP
-SERVER_PORT = 5050  # Replace with your server's port
+SERVER_IP: str = config.get('server', 'listen_ip')
+SERVER_PORT: int = int(config.get('server', 'port'))
+SSL_ENABLED: bool = config.getboolean('server', 'ssl_enabled')
+PEM_FILE_LOCATION: str = config.get('server', 'certificate_pem')
 HEADER = 1024
 DISCONNECT_MESSAGE: str = "!DISCONNECT"
-SSL_ENABLED: bool = False
 ADDR: tuple = (SERVER_IP, SERVER_PORT)
 FORMAT = "utf-8"
-PEM_FILE_LOCATION: str = "ssl.pem"
 
 if SSL_ENABLED:
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
