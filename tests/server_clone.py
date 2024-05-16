@@ -19,6 +19,7 @@ FILE_PATH: str = config.get('server', 'linuxpath')
 HEADER: int = 1024
 FORMAT: str = "utf-8"
 DISCONNECT_MESSAGE: str = "!DISCONNECT"
+CERTIFICATE_PATH: str = config.get('server', 'certificate_path')
 
 # Setup logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
