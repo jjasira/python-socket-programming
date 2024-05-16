@@ -29,7 +29,9 @@ def send_message(sock: socket, message: str) -> None:
     ("NonExistentString", b'STRING NOT FOUND\n'),  # Does not exist in file
     ("String", b'STRING NOT FOUND\n'), # The server should not return true for a word that is a substring
     ("tESTsTRING", b'STRING NOT FOUND\n'), # The query should be case sensitive
-    ("Brother", b'STRING NOT FOUND\n'),
+    ("Father", b'STRING NOT FOUND\n'), # Has single quotes at the end
+    ("Mother", b'STRING EXISTS\n'), # The string is at the end of the file
+    ("Brother", b'STRING EXISTS\n'), # The string is in the middle of the file
 ])
 def test_server_responses(server, input_string: str, expected_response: str):
     host = LISTEN_IP
