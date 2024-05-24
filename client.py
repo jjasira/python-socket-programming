@@ -3,7 +3,7 @@ import socket
 import ssl
 import sys
 
-"""Load configuration."""
+# Load configuration.
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -20,10 +20,10 @@ if SSL_ENABLED:
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     context.load_verify_locations(PEM_FILE_LOCATION)
 
-"""Create a socket object"""
+# Create a socket object.
 client_socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-"""Connect to the server"""
+# Connect to the server
 if SSL_ENABLED:
     client_socket = context.wrap_socket(
         client_socket, server_hostname=SERVER_IP)
@@ -33,23 +33,28 @@ else:
 
 
 def send_data(msg: str) -> None:
+    """
+    This function takes in a msg, encodes the message and sends it to the server
+
+    :param msg: the message to be sent which will be passed as an argument when
+    the client.py script is executed
+    """
     message: bytes = msg.encode(FORMAT)
     msg_length: int = len(message)
     send_length: bytes = str(msg_length).encode(FORMAT)
-    """Ensure that the message sent is the required size by padding or removing extra characters
-        this will also prevent BUFFER OVERFLOW
-    """
+    # Ensure that the message sent is the required size by padding or removing extra characters
+    # this will also prevent BUFFER OVERFLOW
     send_length += b' ' * (HEADER - len(send_length))
     client_socket.send(send_length)
     client_socket.send(message)
-    """Receive response from the server"""
 
 
-"""Send the message to the server"""
+# Send the message to the server
 data: str = sys.argv[1]
 send_data(data)
 
+# Receive response from the server
 response: bytes = client_socket.recv(1024)
 print("Server response:", response.decode(FORMAT))
-"""Close the socket"""
+# Close the socket
 client_socket.close()

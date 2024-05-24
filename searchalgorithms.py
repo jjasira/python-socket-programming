@@ -1,21 +1,25 @@
-"""Standard library imports."""
 import matplotlib.pyplot as plt
 import random
 import string
 import time
 from tabulate import tabulate
 
-"""External imports."""
+
 
 
 # Naive search algorithm
 def naive_search(text: str, pattern: str) -> int:
-    n: int = len(text)
-    m: int = len(pattern)
     """Doing a linear search, comparing every character of the
         pattern to be searched with a pattern of the same length
         in the text.
+
+        :param text: The text where the search will be performed
+        :param pattern: The pattern which is being searched from the text
+        :return: Either -1 if no match was found or any other value if a match was found
     """
+    n: int = len(text)
+    m: int = len(pattern)
+    
     for i in range(n - m + 1):
         if text[i:i + m] == pattern:
             return i
@@ -28,6 +32,10 @@ def kmp_search(text: str, pattern: str) -> int:
     """This algorithm improves the efficiency of string matching by
         preprocessing the pattern to create a partial match table (prefix table)
         that allows the search to skip characters in the text.
+
+        :param text: The text where the search will be performed
+        :param pattern: The pattern which is being searched from the text
+        :return: Either -1 if no match was found or any other value if a match was found
     """
     def compute_lps(pattern: str) -> list:
         """We create alist of 0's the whose length is equal to the patterns length."""
@@ -72,6 +80,10 @@ def boyer_moore_search(text: str, pattern: str) -> int:
     """This algorithm preprocesses the pattern to create two tables
        (bad character and good suffix) that guide the search, allowing
         it to skip sections of the text, making it efficient for longer patterns.
+
+        :param text: The text where the search will be performed
+        :param pattern: The pattern which is being searched from the text
+        :return: Either -1 if no match was found or any other value if a match was found
     """
     def bad_char_table(pattern: str) -> list:
         bad_char: list = [-1] * 256
@@ -133,6 +145,10 @@ def rabin_karp_search(text: str, pattern: str) -> int:
     """This algorithm uses hashing to find a substring within a
        string. It calculates the hash of the pattern and compares
        it with the hash of substring in the text.
+
+       :param text: The text where the search will be performed
+        :param pattern: The pattern which is being searched from the text
+        :return: Either -1 if no match was found or any other value if a match was found
     """
     d: int = 256
     q: int = 101
