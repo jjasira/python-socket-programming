@@ -25,10 +25,12 @@ client_socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 """Connect to the server"""
 if SSL_ENABLED:
-    client_socket = context.wrap_socket(client_socket, server_hostname=SERVER_IP)
+    client_socket = context.wrap_socket(
+        client_socket, server_hostname=SERVER_IP)
     client_socket.connect(ADDR)
 else:
     client_socket.connect((SERVER_IP, SERVER_PORT))
+
 
 def send_data(msg: str) -> None:
     message: bytes = msg.encode(FORMAT)
@@ -42,7 +44,8 @@ def send_data(msg: str) -> None:
     client_socket.send(message)
     """Receive response from the server"""
 
-"""Send the message to the server""" 
+
+"""Send the message to the server"""
 data: str = sys.argv[1]
 send_data(data)
 
