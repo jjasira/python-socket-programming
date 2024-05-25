@@ -5,8 +5,6 @@ import time
 from tabulate import tabulate
 
 
-
-
 # Naive search algorithm
 def naive_search(text: str, pattern: str) -> int:
     """Doing a linear search, comparing every character of the
@@ -19,7 +17,7 @@ def naive_search(text: str, pattern: str) -> int:
     """
     n: int = len(text)
     m: int = len(pattern)
-    
+
     for i in range(n - m + 1):
         if text[i:i + m] == pattern:
             return i

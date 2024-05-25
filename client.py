@@ -8,8 +8,11 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 SERVER_IP: str = config.get('server', 'listen_ip')
+# SERVER_IP: str = socket.gethostbyname(socket.gethostname())
 SERVER_PORT: int = int(config.get('server', 'port'))
+# SERVER_PORT: int = 5050
 SSL_ENABLED: bool = config.getboolean('server', 'ssl_enabled')
+# SSL_ENABLED: bool = False
 PEM_FILE_LOCATION: str = config.get('server', 'certificate_pem')
 HEADER: int = 1024
 DISCONNECT_MESSAGE: str = "!DISCONNECT"

@@ -15,19 +15,19 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 # Define constants from configuration.
-# LISTEN_IP: str = config.get('server', 'listen_ip')
-LISTEN_IP = socket.gethostbyname(socket.gethostname())
-# PORT: int = int(config.get('server', 'port'))
-PORT = 5050
-# SSL_ENABLED: bool = config.getboolean('server', 'ssl_enabled')
-SSL_ENABLED = False
-# CERTIFICATE_PATH: str = config.get('server', 'certificate_path')
-# PRIVATE_KEY: str = config.get('server', 'private_key')
-# CERT_PEM: str = config.get('server', 'certificate_pem')
-# REREAD_ON_QUERY: bool = config.getboolean('server', 'reread_on_query')
-REREAD_ON_QUERY = False
-# FILE_PATH: str = config.get('server', 'linuxpath')
-FILE_PATH: str = '200K.txt'
+LISTEN_IP: str = config.get('server', 'listen_ip')
+# LISTEN_IP = socket.gethostbyname(socket.gethostname())
+PORT: int = int(config.get('server', 'port'))
+# PORT = 5050
+SSL_ENABLED: bool = config.getboolean('server', 'ssl_enabled')
+# SSL_ENABLED = False
+CERTIFICATE_PATH: str = config.get('server', 'certificate_path')
+PRIVATE_KEY: str = config.get('server', 'private_key')
+CERT_PEM: str = config.get('server', 'certificate_pem')
+REREAD_ON_QUERY: bool = config.getboolean('server', 'reread_on_query')
+# REREAD_ON_QUERY = False
+FILE_PATH: str = config.get('server', 'linuxpath')
+# FILE_PATH: str = 'test_200K.txt' # use this when running the test suite
 HEADER: int = 1024
 FORMAT: str = "utf-8"
 DISCONNECT_MESSAGE: str = "!DISCONNECT"
