@@ -8,33 +8,35 @@ from tabulate import tabulate
 # Naive search algorithm
 def naive_search(text: str, pattern: str) -> int:
     """Doing a linear search, comparing every character of the
-        pattern to be searched with a pattern of the same length
-        in the text.
+    pattern to be searched with a pattern of the same length
+    in the text.
 
-        :param text: The text where the search will be performed
-        :param pattern: The pattern which is being searched from the text
-        :return: Either -1 if no match was found or any other value if a match was found
+    :param text: The text where the search will be performed
+    :param pattern: The pattern which is being searched from the text
+    :return: Either -1 if no match was found or any other value if a match was found
     """
     n: int = len(text)
     m: int = len(pattern)
 
     for i in range(n - m + 1):
-        if text[i:i + m] == pattern:
+        if text[i : i + m] == pattern:
             return i
     return -1
+
 
 # Knuth-Morris-Pratt (KMP) search algorithm
 
 
 def kmp_search(text: str, pattern: str) -> int:
     """This algorithm improves the efficiency of string matching by
-        preprocessing the pattern to create a partial match table (prefix table)
-        that allows the search to skip characters in the text.
+    preprocessing the pattern to create a partial match table (prefix table)
+    that allows the search to skip characters in the text.
 
-        :param text: The text where the search will be performed
-        :param pattern: The pattern which is being searched from the text
-        :return: Either -1 if no match was found or any other value if a match was found
+    :param text: The text where the search will be performed
+    :param pattern: The pattern which is being searched from the text
+    :return: Either -1 if no match was found or any other value if a match was found
     """
+
     def compute_lps(pattern: str) -> list:
         """We create alist of 0's the whose length is equal to the patterns length."""
         lps: list = [0] * len(pattern)
@@ -71,18 +73,20 @@ def kmp_search(text: str, pattern: str) -> int:
                 i += 1
     return -1
 
+
 # Boyer-Moore search algorithm
 
 
 def boyer_moore_search(text: str, pattern: str) -> int:
     """This algorithm preprocesses the pattern to create two tables
-       (bad character and good suffix) that guide the search, allowing
-        it to skip sections of the text, making it efficient for longer patterns.
+    (bad character and good suffix) that guide the search, allowing
+     it to skip sections of the text, making it efficient for longer patterns.
 
-        :param text: The text where the search will be performed
-        :param pattern: The pattern which is being searched from the text
-        :return: Either -1 if no match was found or any other value if a match was found
+     :param text: The text where the search will be performed
+     :param pattern: The pattern which is being searched from the text
+     :return: Either -1 if no match was found or any other value if a match was found
     """
+
     def bad_char_table(pattern: str) -> list:
         bad_char: list = [-1] * 256
         for i in range(len(pattern)):
@@ -136,17 +140,18 @@ def boyer_moore_search(text: str, pattern: str) -> int:
             s += max(good_suffix[j], j - bad_char[ord(text[s + j])])
     return -1
 
+
 # Rabin-Karp search algorithm
 
 
 def rabin_karp_search(text: str, pattern: str) -> int:
     """This algorithm uses hashing to find a substring within a
-       string. It calculates the hash of the pattern and compares
-       it with the hash of substring in the text.
+    string. It calculates the hash of the pattern and compares
+    it with the hash of substring in the text.
 
-       :param text: The text where the search will be performed
-        :param pattern: The pattern which is being searched from the text
-        :return: Either -1 if no match was found or any other value if a match was found
+    :param text: The text where the search will be performed
+     :param pattern: The pattern which is being searched from the text
+     :return: Either -1 if no match was found or any other value if a match was found
     """
     d: int = 256
     q: int = 101
@@ -162,7 +167,7 @@ def rabin_karp_search(text: str, pattern: str) -> int:
         t = (d * t + ord(text[i])) % q
     for i in range(n - m + 1):
         if p == t:
-            if text[i:i + m] == pattern:
+            if text[i : i + m] == pattern:
                 return i
         if i < n - m:
             t = (d * (t - ord(text[i]) * h) + ord(text[i + m])) % q
@@ -170,13 +175,14 @@ def rabin_karp_search(text: str, pattern: str) -> int:
                 t += q
     return -1
 
+
 # Aho-Corasick search algorithm
 
 
 class AhoCorasick:
     """This algorithm builds a finite state machine from a set of patterns
-       and uses it to search for all occurrences of the pattern simultaneously
-       in a text.
+    and uses it to search for all occurrences of the pattern simultaneously
+    in a text.
     """
 
     def __init__(self):
@@ -208,10 +214,9 @@ class AhoCorasick:
                 while state and char not in self.goto[state]:
                     state = self.fail[state]
                 self.fail[s] = self.goto[state].get(char, 0) if state else 0
-                self.out.setdefault(
-                    s, []).extend(
-                    self.out.get(
-                        self.fail[s], []))
+                self.out.setdefault(s, []).extend(
+                    self.out.get(self.fail[s], [])
+                )
 
     def search(self, text: str) -> list:
         state: int = 0
@@ -224,11 +229,13 @@ class AhoCorasick:
                 results.append((i - len(pattern) + 1, pattern))
         return results
 
+
 # Function to generate random text
 
 
 def generate_text(size: int) -> str:
-    return ''.join(random.choices(string.ascii_lowercase + ' ', k=size))
+    return "".join(random.choices(string.ascii_lowercase + " ", k=size))
+
 
 # Function to measure execution time of a search function
 
@@ -243,7 +250,7 @@ def measure_time(search_function, text: str, pattern: str = None) -> float:
     return end - start
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # Define file sizes and pattern
     file_sizes: list = [10000, 50000, 100000, 500000, 1000000]
@@ -265,34 +272,38 @@ if __name__ == '__main__':
         times_naive.append(measure_time(naive_search, text, pattern))
         times_kmp.append(measure_time(kmp_search, text, pattern))
         times_boyer_moore.append(
-            measure_time(
-                boyer_moore_search,
-                text,
-                pattern))
+            measure_time(boyer_moore_search, text, pattern)
+        )
         times_rabin_karp.append(measure_time(rabin_karp_search, text, pattern))
         times_aho_corasick.append(measure_time(ac.search, text))
 
     # Prepare data for table
-    table_data = [["File Size (characters)",
-                   "Naive Search",
-                   "KMP Search",
-                   "Boyer-Moore Search",
-                   "Rabin-Karp Search",
-                   "Aho-Corasick Search"]]
+    table_data = [
+        [
+            "File Size (characters)",
+            "Naive Search",
+            "KMP Search",
+            "Boyer-Moore Search",
+            "Rabin-Karp Search",
+            "Aho-Corasick Search",
+        ]
+    ]
     """The code above will populate the table headers as stipulated
        the one below will populate the table body with the search times
        for the search-algorithms against the file sizes.
     """
 
     for i in range(len(file_sizes)):
-        table_data.append([
-            file_sizes[i],
-            times_naive[i],
-            times_kmp[i],
-            times_boyer_moore[i],
-            times_rabin_karp[i],
-            times_aho_corasick[i]
-        ])
+        table_data.append(
+            [
+                file_sizes[i],
+                times_naive[i],
+                times_kmp[i],
+                times_boyer_moore[i],
+                times_rabin_karp[i],
+                times_aho_corasick[i],
+            ]
+        )
 
     # Print table
     """The table is printed using the tabulate module"""
@@ -300,14 +311,14 @@ if __name__ == '__main__':
 
     # Plotting the results
     plt.figure(figsize=(12, 6))
-    plt.plot(file_sizes, times_naive, label='Naive Search')
-    plt.plot(file_sizes, times_kmp, label='KMP Search')
-    plt.plot(file_sizes, times_boyer_moore, label='Boyer-Moore Search')
-    plt.plot(file_sizes, times_rabin_karp, label='Rabin-Karp Search')
-    plt.plot(file_sizes, times_aho_corasick, label='Aho-Corasick Search')
-    plt.xlabel('File Size (characters)')
-    plt.ylabel('Execution Time (seconds)')
-    plt.title('Execution Time of Search Algorithms')
+    plt.plot(file_sizes, times_naive, label="Naive Search")
+    plt.plot(file_sizes, times_kmp, label="KMP Search")
+    plt.plot(file_sizes, times_boyer_moore, label="Boyer-Moore Search")
+    plt.plot(file_sizes, times_rabin_karp, label="Rabin-Karp Search")
+    plt.plot(file_sizes, times_aho_corasick, label="Aho-Corasick Search")
+    plt.xlabel("File Size (characters)")
+    plt.ylabel("Execution Time (seconds)")
+    plt.title("Execution Time of Search Algorithms")
     plt.legend()
     plt.grid(True)
     plt.show()

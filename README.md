@@ -1,6 +1,10 @@
 # python-socket-programming
 This is a project for a job application
 
+# CONFIGURATION
+the default configurations for the server.py and client.py are in the config.ini file. Adjustments should be made there for options such as the REREAD_ON_QUERY and linuxpath.
+This can be altered to the user's liking.
+
 # INSTALLATION GUIDE USING systemmd(DAEMON)
 Use systemmd to run the script
 It should come installed, if not, run the following command

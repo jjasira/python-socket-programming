@@ -5,15 +5,15 @@ import sys
 
 # Load configuration.
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read("config.ini")
 
-SERVER_IP: str = config.get('server', 'listen_ip')
+SERVER_IP: str = config.get("server", "listen_ip")
 # SERVER_IP: str = socket.gethostbyname(socket.gethostname())
-SERVER_PORT: int = int(config.get('server', 'port'))
+SERVER_PORT: int = int(config.get("server", "port"))
 # SERVER_PORT: int = 5050
-SSL_ENABLED: bool = config.getboolean('server', 'ssl_enabled')
+SSL_ENABLED: bool = config.getboolean("server", "ssl_enabled")
 # SSL_ENABLED: bool = False
-PEM_FILE_LOCATION: str = config.get('server', 'certificate_pem')
+PEM_FILE_LOCATION: str = config.get("server", "certificate_pem")
 HEADER: int = 1024
 DISCONNECT_MESSAGE: str = "!DISCONNECT"
 ADDR: tuple = (SERVER_IP, SERVER_PORT)
@@ -29,7 +29,8 @@ client_socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Connect to the server
 if SSL_ENABLED:
     client_socket = context.wrap_socket(
-        client_socket, server_hostname=SERVER_IP)
+        client_socket, server_hostname=SERVER_IP
+    )
     client_socket.connect(ADDR)
 else:
     client_socket.connect((SERVER_IP, SERVER_PORT))
@@ -47,7 +48,7 @@ def send_data(msg: str) -> None:
     send_length: bytes = str(msg_length).encode(FORMAT)
     # Ensure that the message sent is the required size by padding or removing extra characters
     # this will also prevent BUFFER OVERFLOW
-    send_length += b' ' * (HEADER - len(send_length))
+    send_length += b" " * (HEADER - len(send_length))
     client_socket.send(send_length)
     client_socket.send(message)
 

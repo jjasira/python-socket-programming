@@ -2,13 +2,21 @@ import socket
 import threading
 import time
 import pytest
+
 # we will import the clone of our original server that will be used for testing purposes
 # we will also import the required constants that will be used to format
 # our messages
-from server import main as server_main, DISCONNECT_MESSAGE, HEADER, FORMAT, LISTEN_IP, PORT
+from server import (
+    main as server_main,
+    DISCONNECT_MESSAGE,
+    HEADER,
+    FORMAT,
+    LISTEN_IP,
+    PORT,
+)
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def server():
     server_thread = threading.Thread(target=server_main, daemon=True)
     server_thread.start()
@@ -29,23 +37,32 @@ def send_message(sock: socket, message: str) -> None:
     message = message.encode(FORMAT)
     message_length = len(message)
     send_length = str(message_length).encode(FORMAT)
-    send_length += b' ' * (HEADER - len(send_length))
+    send_length += b" " * (HEADER - len(send_length))
     sock.send(send_length)
     sock.send(message)
 
 
-@pytest.mark.parametrize("input_string, expected_response", [
-    ("TestString", b'STRING EXISTS\n'),  # Exists in file
-    ("NonExistentString", b'STRING NOT FOUND\n'),  # Does not exist in file
-    # The server should not return true for a word that is a substring
-    ("String", b'STRING NOT FOUND\n'),
-    # The query should be case sensitive
-    ("tESTsTRING", b'STRING NOT FOUND\n'),
-    ("Father", b'STRING NOT FOUND\n'),  # Has single quotes at the end
-    ("Mother", b'STRING EXISTS\n'),  # The string is at the end of the file
-    ("Brother", b'STRING EXISTS\n'),  # The string is in the middle of the file
-    ("TestStr", b'STRING NOT FOUND\n'),  # Should not accept partial matches
-])
+@pytest.mark.parametrize(
+    "input_string, expected_response",
+    [
+        ("TestString", b"STRING EXISTS\n"),  # Exists in file
+        ("NonExistentString", b"STRING NOT FOUND\n"),  # Does not exist in file
+        # The server should not return true for a word that is a substring
+        ("String", b"STRING NOT FOUND\n"),
+        # The query should be case sensitive
+        ("tESTsTRING", b"STRING NOT FOUND\n"),
+        ("Father", b"STRING NOT FOUND\n"),  # Has single quotes at the end
+        ("Mother", b"STRING EXISTS\n"),  # The string is at the end of the file
+        (
+            "Brother",
+            b"STRING EXISTS\n",
+        ),  # The string is in the middle of the file
+        (
+            "TestStr",
+            b"STRING NOT FOUND\n",
+        ),  # Should not accept partial matches
+    ],
+)
 def test_server_responses(server, input_string: str, expected_response: str):
     """
     This function takes the input string and compares the server response for it to the expected response
@@ -71,4 +88,4 @@ def test_disconnect_message(server):
     with socket.create_connection((host, port)) as sock:
         send_message(sock, DISCONNECT_MESSAGE)
         response = sock.recv(HEADER)
-        assert response == b''
+        assert response == b""
