@@ -5,6 +5,11 @@ This is a project for a job application
 the default configurations for the server.py and client.py are in the config.ini file. Adjustments should be made there for options such as the REREAD_ON_QUERY and linuxpath.
 This can be altered to the user's liking.
 
+# Client script
+The client script should be run with one additional positional argument which is the search query e.g 
+    python client.py Brother
+In this case, "Brother" is the search query.
+
 # INSTALLATION GUIDE USING systemmd(DAEMON)
 Use systemmd to run the script
 It should come installed, if not, run the following command
